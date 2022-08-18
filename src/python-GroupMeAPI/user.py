@@ -1,6 +1,8 @@
 import uuid
 import requests
-from groups import Group
+from group import Group
+from dm import DirectMessage
+from bot import Bot
 
 BASE_URL = "https://api.groupme.com/v3/"
 
@@ -18,7 +20,6 @@ class User:
         res = requests.get(f"{BASE_URL}groups?page={page}&per_page={per_page}{omit_str}", headers={"X-Access-Token": self.token})
         self._verify_success(res)
         groups = []
-        res.url
         for raw_group in res.json()["response"]:
             groups.append(Group(from_response_obj=raw_group))
         
@@ -71,18 +72,46 @@ class User:
         })
         self._verify_success(res)
         return res.json()["response"]["results"][0]["status"]
-'''
-    def set_group_id(self, id):
-        self.group_id = id
     
-    def send_message(self, message_content):
-        if self.group_id == 0:
-            return
-        res = requests.post(f"https://api.groupme.com/v3/groups/{self.group_id}/messages?token={self.token}", json={
-            "message": {
-                "source_guid": str(uuid.uuid4()),
-                "text": message_content
+    def get_dms(self, page=1, per_page=10):
+        res = requests.post(f"{BASE_URL}chats", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        dms = []
+        for raw_dm in res.json()["response"]:
+            dms.append(DirectMessage(from_response_obj=raw_dm))
+        return dms
+    
+    def like_message(self, conversation_id, message_id):
+        res = requests.post(f"{BASE_URL}messages/{conversation_id}/{message_id}/like", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return True
+    
+    def unlike_message(self, conversation_id, message_id):
+        res = requests.post(f"{BASE_URL}messages/{conversation_id}/{message_id}/unlike", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return True
+    
+    def create_bot(self, name, group_id, avatar_url="", callback_url="", dm_notification=False):
+        #idk if this will work, but if you want the bot to recive dms for this user, set group_id to an empty string and set dm_notification to True
+        res = requests.post(f"{BASE_URL}bots", headers={"X-Access-Token": self.token}, json={
+            "bot": {
+                "name": name,
+                "group_id": group_id,
+                "avatar_url": avatar_url,
+                "callback_url": callback_url,
+                "dm_notification": dm_notification
             }
         })
-'''    
+        self._verify_success(res)
+        return res.json()["response"]
 
+    
+    def get_bots(self):
+        res = requests.get(f"{BASE_URL}bots", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json()["response"]
+    
+    def delete_bot(self, bot_id):
+        res = requests.post(f"{BASE_URL}bots/destroy", headers={"X-Access-Token": self.token}, json={"bot_id": bot_id})
+        self._verify_success(res)
+        return res.json()["response"]

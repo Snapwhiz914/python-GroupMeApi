@@ -53,9 +53,32 @@ class Group():
         self._verify_success(res)
         return res.json["response"]["messages"]
     
-    def attachment_obj_creator():
-        #TODO: implement me
-        pass
+    def attachment_obj_creator(type="image", *args):
+        if type == "image":
+            return {
+                "type": type,
+                "url": args[0]
+            }
+        if type == "location":
+            return {
+                "type": type,
+                "name": args[0],
+                "lat": args[1],
+                "lng": args[2]
+            }
+        if type == "emoji":
+            return {
+                "type": type,
+                "placeholder": args[0],
+                "charmap": args[1]
+            }
+        if type == "mentions":
+            return {
+                "type": "mentions",
+                "loci": args[0],
+                "user_ids": args[1]
+            }
+        raise Exception("Bad type, must be one of: image, location, emoji, mentions")
 
     def send_message(self, text, attachments=[]):
         res = requests.post(f"{BASE_URL}groups/{self.id}/messages", headers={"X-Access-Token": self.token}, json={
@@ -67,3 +90,18 @@ class Group():
         })
         self._verify_success(res)
         return res.json["response"]["message"]
+    
+    def get_liked_messages(self, time_period):
+        res = requests.get(f"{BASE_URL}groups/{self.id}/likes?period={time_period}", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json["response"]["messages"]
+    
+    def get_my_liked_messages(self):
+        res = requests.get(f"{BASE_URL}groups/{self.id}/likes/mine", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json["response"]["messages"]
+    
+    def get_my_messages_others_have_liked(self):
+        res = requests.get(f"{BASE_URL}groups/{self.id}/likes/for_me", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json["response"]["messages"]

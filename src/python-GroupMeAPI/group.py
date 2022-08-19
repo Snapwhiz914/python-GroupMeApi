@@ -105,3 +105,5 @@ class Group():
         res = requests.get(f"{BASE_URL}groups/{self.id}/likes/for_me", headers={"X-Access-Token": self.token})
         self._verify_success(res)
         return res.json["response"]["messages"]
+    
+    

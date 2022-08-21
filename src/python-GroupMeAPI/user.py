@@ -109,9 +109,60 @@ class User:
     def get_bots(self):
         res = requests.get(f"{BASE_URL}bots", headers={"X-Access-Token": self.token})
         self._verify_success(res)
-        return res.json()["response"]
+        bots = []
+        for raw_bot in res.json()["response"]:
+            bots.append(Bot(from_response_obj=raw_bot))
+        return bots
     
     def delete_bot(self, bot_id):
         res = requests.post(f"{BASE_URL}bots/destroy", headers={"X-Access-Token": self.token}, json={"bot_id": bot_id})
         self._verify_success(res)
         return res.json()["response"]
+    
+    def get_my_user_info(self):
+        res = requests.get(f"{BASE_URL}/users/me", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json["response"]
+    
+    def update_my_user_info(self, avatar_url="", name="", email="", zip_code=""):
+        req_obj = {}
+        if avatar_url != "": req_obj["avatar_url"] = avatar_url
+        if name != "": req_obj["name"] = name
+        if email != "": req_obj["email"] = email
+        if zip_code != "": req_obj["zip_code"] = zip_code
+        res = requests.post(f"{BASE_URL}users/update", headers={"X-Access-Token": self.token}, json=req_obj)
+        self._verify_success(res)
+        return res.json["response"]
+    
+    def enable_sms_mode(self, duration, registration_id=""):
+        res = requests.post(f"{BASE_URL}users/sms_mode", headers={"X-Access-Token": self.token}, json={
+            "duration": duration,
+            "registration_id": registration_id
+        })
+        self._verify_success(res)
+        return True
+
+    def disable_sms_mode(self):
+        res = requests.post(f"{BASE_URL}users/sms_mode/delete", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return True
+    
+    def get_blocks(self):
+        res = requests.get(f"{BASE_URL}blocks?user={self.get_my_user_info()['id']}", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json()["response"]
+    
+    def does_block_exist(self, other_user_id):
+        res = requests.get(f"{BASE_URL}blocks/between?user={self.get_my_user_info()['id']}&otherUser={other_user_id}", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json()["response"]["between"]
+    
+    def block_user(self, other_user_id):
+        res = requests.post(f"{BASE_URL}blocks?user={self.get_my_user_info()['id']}&otherUser={other_user_id}", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return res.json()["response"]
+    
+    def unblock_user(self, other_user_id):
+        res = requests.post(f"{BASE_URL}blocks/delete?user={self.get_my_user_info()['id']}&otherUser={other_user_id}", headers={"X-Access-Token": self.token})
+        self._verify_success(res)
+        return True

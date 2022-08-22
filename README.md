@@ -1,6 +1,6 @@
 # GroupMe API Python Wrapper
 
-A simple python library that aims to encompass all features of GroupMe present in thier documentation in (dev.groupme.com)[https://dev.groupme.com/docs/v3]
+A simple python library that aims to encompass all features of GroupMe present in thier documentation in[https://dev.groupme.com/docs/v3
 
 ### Use Cases
 
@@ -15,7 +15,7 @@ Because of the uses of this library, I will not be prioritzing it as much as I w
 Every method in this library, unless otherwise stated below, will return one of the following:
  - An error (see error section)
  - A python object (see below)
- - A dictionary object that has the same structure as its corresponding API endpoint in the (Official API Docs)[https://dev.groupme.com/docs/v3]
+ - A dictionary object that has the same structure as its corresponding API endpoint in the https://dev.groupme.com/docs/v3
  - True, if there is no return data stated in the offical docs and there wasn't an error raised before it is returned
  - generally, if the main message of a result is encompassed in a name, eg: "messages": [] will just be returned as [], and "between". Refer to documentation so you know when this will happen
 

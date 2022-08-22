@@ -1,4 +1,3 @@
-import uuid
 import requests
 from group import Group
 from dm import DirectMessage

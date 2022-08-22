@@ -7,7 +7,7 @@ name = "python-groupmeapi"
 version = "1.0.0"
 description = "An API wrapper for GroupMe"
 readme = "README.md"
-authors = { name = "LL" }
+authors = [{ name = "LL" }]
 license = { file = "LICENSE" }
 classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",

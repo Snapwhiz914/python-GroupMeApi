@@ -17,7 +17,7 @@ Every method in this library, unless otherwise stated below, will return one of 
  - A python object (see below)
  - A dictionary object that has the same structure as its corresponding API endpoint in the https://dev.groupme.com/docs/v3
  - True, if there is no return data stated in the offical docs and there wasn't an error raised before it is returned
- - generally, if the main message of a result is encompassed in a name, eg: "messages": [] will just be returned as [], and "between". Refer to documentation so you know when this will happen
+ - generally, if the main message of a result is encompassed in a name, eg: "messages": [] will just be returned as [], and "between": True will just be returned as True. Refer to documentation so you know when this will happen
 
 Methods that will return a different value than a dictionary object with the same structure as its corresponding API endpoint:
  - user.get_groups(): [Group object] (Note: [] means a list of objects)

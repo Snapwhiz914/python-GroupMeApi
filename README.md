@@ -1,6 +1,6 @@
 # GroupMe API Python Wrapper
 
-A simple python library that aims to encompass all features of GroupMe present in thier documentation in[https://dev.groupme.com/docs/v3
+A simple python library that aims to encompass all features of GroupMe present in thier documentation in https://dev.groupme.com/docs/v3
 
 ### Use Cases
 

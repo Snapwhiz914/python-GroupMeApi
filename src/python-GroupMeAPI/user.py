@@ -103,9 +103,8 @@ class User:
             }
         })
         self._verify_success(res)
-        return res.json()["response"]
+        return Bot(self.token, from_response_obj=res.json()["response"])
 
-    
     def get_bots(self):
         res = requests.get(f"{BASE_URL}bots", headers={"X-Access-Token": self.token})
         self._verify_success(res)
